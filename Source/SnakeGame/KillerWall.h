@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interactable.h"
 #include "KillerWall.generated.h"
 
 UCLASS()
-class SNAKEGAME_API AKillerWall : public AActor
+class SNAKEGAME_API AKillerWall : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 	
@@ -22,5 +23,5 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	virtual void Interact(AActor* Interactor, bool bIsHead) override;
 };

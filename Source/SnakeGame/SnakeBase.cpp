@@ -12,8 +12,10 @@ ASnakeBase::ASnakeBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	ElementSize = 100.f;
+	StartPosition = 550.f;
 	MovementSpeed = 10.f;
 	LastMoveDirection = EMovementDirection::DOWN;
+	ChangeDirection = true;
 }
 
 // Called when the game starts or when spawned
@@ -21,7 +23,7 @@ void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
 	SetActorTickInterval(MovementSpeed);
-	AddSnakeElement(5);
+	AddSnakeElement(4);
 	
 }
 
@@ -68,7 +70,7 @@ void ASnakeBase::Move()
 		break;
 	}	
 
-	//AddActorWorldOffset(MovementVector);
+	ChangeDirection = true;
 	SnakeElements[0]->ToggleCollision();
 
 	for (int i = SnakeElements.Num() - 1; i > 0; i--)

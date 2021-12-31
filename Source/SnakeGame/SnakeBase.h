@@ -33,7 +33,13 @@ public:
 	float ElementSize;
 
 	UPROPERTY(EditDefaultsOnly)
+		float StartPosition;
+
+	UPROPERTY(EditDefaultsOnly)
 	float MovementSpeed;
+
+	UPROPERTY()
+		bool ChangeDirection;
 
 	UPROPERTY()
 	TArray<ASnakeElementBase*> SnakeElements;
@@ -55,4 +61,6 @@ public:
 	void Move();
 	UFUNCTION()
 		void SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other);
+
+	int32 score = 0;
 };

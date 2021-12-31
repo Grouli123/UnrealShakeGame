@@ -22,7 +22,7 @@ void APlayerPawnBase::BeginPlay()
 {
 	Super::BeginPlay();
 	SetActorRotation(FRotator(-90, 0, 0));
-	CreateSnakeActor();
+	//CreateSnakeActor();
 }
 
 // Called every frame
@@ -44,34 +44,66 @@ void APlayerPawnBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void APlayerPawnBase::CreateSnakeActor()
 {
 	SnakeActor = GetWorld()->SpawnActor<ASnakeBase>(SnakeActorClass, FTransform());
+	GameMode = 1;
 }
 
 void APlayerPawnBase::HandlePlayerVerticalInput(float value)
 {
 	if (IsValid(SnakeActor))
 	{
-		if (value > 0 && SnakeActor->LastMoveDirection!=EMovementDirection::DOWN)
+		if (value > 0 && SnakeActor->LastMoveDirection!=EMovementDirection::DOWN && SnakeActor->ChangeDirection)
 		{
 			SnakeActor->LastMoveDirection = EMovementDirection::UP;
+			SnakeActor->ChangeDirection = false;
 		}
-		else if (value < 0 && SnakeActor->LastMoveDirection != EMovementDirection::UP)
+		else if (value < 0 && SnakeActor->LastMoveDirection != EMovementDirection::UP && SnakeActor->ChangeDirection)
 		{
 			SnakeActor->LastMoveDirection = EMovementDirection::DOWN;
+			SnakeActor->ChangeDirection = false;
 		}
 	}
 }
 
-void APlayerPawnBase::HandlePlayerHorizontalInput(float value) 
+void APlayerPawnBase::HandlePlayerHorizontalInput(float value)
 {
 	if (IsValid(SnakeActor))
 	{
-		if (value > 0 && SnakeActor->LastMoveDirection != EMovementDirection::LEFT)
+		if (value > 0 && SnakeActor->LastMoveDirection != EMovementDirection::LEFT && SnakeActor->ChangeDirection)
 		{
 			SnakeActor->LastMoveDirection = EMovementDirection::RIGHT;
+			SnakeActor->ChangeDirection = false;
 		}
-		else if (value < 0 && SnakeActor->LastMoveDirection != EMovementDirection::RIGHT)
+		else if (value < 0 && SnakeActor->LastMoveDirection != EMovementDirection::RIGHT && SnakeActor->ChangeDirection)
 		{
 			SnakeActor->LastMoveDirection = EMovementDirection::LEFT;
+			SnakeActor->ChangeDirection = false;
 		}
 	}
 }
+	void APlayerPawnBase::DestroyFood(AActor * Dest)
+	{
+		AddRandomApple();
+	}
+
+	int32 APlayerPawnBase::GetScore()
+	{
+		if (IsValid(SnakeActor))
+		{
+			return SnakeActor->score;
+		}
+		return 0;
+	}
+
+	void APlayerPawnBase::AddRandomApple()
+	{
+		GameMode = 1;
+		FRotator StartPointRotation = FRotator(0, 0, 0);
+
+		float SpawnX = FMath::FRandRange(MinX, MaxX);
+		float SpawnY = FMath::FRandRange(MinY, MaxY);
+
+		FVector StartPoint = FVector(SpawnX, SpawnY, SpawnZ);
+		FTransform Transform(StartPoint);
+		AFood* NewFood = GetWorld()->SpawnActor<AFood>(FoodClass, Transform);
+		NewFood->OnDestroyed.AddDynamic(this, &APlayerPawnBase::DestroyFood);
+	}

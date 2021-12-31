@@ -2,6 +2,7 @@
 
 
 #include "KillerWall.h"
+#include "SnakeBase.h"
 
 // Sets default values
 AKillerWall::AKillerWall()
@@ -23,5 +24,14 @@ void AKillerWall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AKillerWall::Interact(AActor* Interactor, bool bIsHead)
+{
+	auto Snake = Cast<ASnakeBase>(Interactor);
+	if (IsValid(Snake))
+	{
+		Snake->Destroy();
+	}
 }
 
