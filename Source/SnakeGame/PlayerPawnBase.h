@@ -61,11 +61,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "SnakePawn")
 		int32 GetScore();
 
-	float MinY = -500.f;
-	float MaxY = 500.f;
+	float MinY = -420.f;
+	float MaxY = 420.f;
 
-	float MinX = -500.f;
-	float MaxX = 500.f;
+	float MinX = -750.f;
+	float MaxX = 110.f;
 
 	float SpawnZ = 35.f;
 
